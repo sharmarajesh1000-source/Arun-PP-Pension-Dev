@@ -412,6 +412,15 @@
             background: linear-gradient(45deg, #a7d8ff, #87ceeb);
         }
 
+        .btn-warning {
+            background: linear-gradient(45deg, #ff9800, #ff5722);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(45deg, #ff5722, #ff9800);
+        }
+
         .actions {
             display: flex;
             gap: 15px;
@@ -648,21 +657,22 @@
             text-shadow: 0 0 10px rgba(0, 188, 212, 0.3);
         }
 
-        /* Delete button styling */
-        .delete-btn {
-            background: rgba(255, 82, 82, 0.2);
-            border: 1px solid rgba(255, 82, 82, 0.5);
-            color: #ff8a8a;
+        /* Delete button styling - UPDATED to match chart colors */
+        .delete-value-btn {
             padding: 8px 15px;
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
-        .delete-btn:hover {
-            background: rgba(255, 82, 82, 0.4);
-            color: var(--light);
-            box-shadow: 0 0 10px rgba(255, 82, 82, 0.3);
+        .delete-value-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
         }
 
         /* Empty state styling */
@@ -754,6 +764,27 @@
         .color-option.selected {
             border-color: var(--light);
         }
+
+        /* Dashboard actions */
+        .dashboard-actions {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        /* Provider card actions */
+        .provider-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .provider-actions .btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -808,6 +839,13 @@
         <div class="tab-content active" id="overview">
             <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
             
+            <!-- ADDED: Save to Cloud button on Dashboard -->
+            <div class="dashboard-actions">
+                <button class="btn btn-success" id="saveDashboardBtn">
+                    <i class="fas fa-cloud-upload-alt"></i> Save All to Cloud
+                </button>
+            </div>
+            
             <!-- Summary Cards -->
             <div class="summary-cards">
                 <div class="card">
@@ -841,7 +879,7 @@
                 <!-- Provider cards will be dynamically generated -->
             </div>
 
-            <!-- ADDED: Add Another Pension Section -->
+            <!-- Add Another Pension Section -->
             <div class="add-pension-section">
                 <h3><i class="fas fa-plus-circle"></i> Manage Your Pensions</h3>
                 <p>Add another pension provider to track all your retirement savings in one place</p>
@@ -1212,9 +1250,22 @@
                             <div class="stat-label">Current Value</div>
                         </div>
                     </div>
+                    <div class="provider-actions">
+                        <button class="btn btn-warning delete-pension-btn" data-pension="${pensionKey}">
+                            <i class="fas fa-trash"></i> Delete Pension
+                        </button>
+                    </div>
                 `;
                 
                 providerCardsContainer.appendChild(card);
+            });
+
+            // Add event listeners for delete pension buttons
+            document.querySelectorAll('.delete-pension-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const pensionKey = this.getAttribute('data-pension');
+                    deletePension(pensionKey);
+                });
             });
         }
 
@@ -1289,6 +1340,44 @@
             
             // Show success message
             showSaveStatus(`Added new pension: ${name}`, true);
+        }
+
+        // Delete pension function
+        function deletePension(pensionKey) {
+            if (Object.keys(pensionData).length <= 1) {
+                alert('You cannot delete the last pension. You need at least one pension provider.');
+                return;
+            }
+            
+            const pensionName = pensionData[pensionKey].name;
+            
+            if (confirm(`Are you sure you want to delete ${pensionName}? This will permanently remove all data for this pension.`)) {
+                // Remove from pension data
+                delete pensionData[pensionKey];
+                
+                // Remove tab
+                const tab = document.querySelector(`.tab[data-tab="${pensionKey}"]`);
+                const tabContent = document.getElementById(pensionKey);
+                
+                if (tab) tab.remove();
+                if (tabContent) tabContent.remove();
+                
+                // Update UI
+                initializeTables();
+                updateCharts();
+                updateSummaryCards();
+                updateProviderCards();
+                
+                // Save to Firebase
+                saveDataToFirebase();
+                
+                // Switch to Dashboard if we were on the deleted pension's tab
+                if (document.querySelector(`.tab[data-tab="${pensionKey}"]`)) {
+                    document.querySelector('.tab[data-tab="overview"]').click();
+                }
+                
+                showSaveStatus(`Deleted pension: ${pensionName}`, true);
+            }
         }
 
         // Create a new tab for a pension
@@ -1406,6 +1495,9 @@
             document.getElementById('saveCapGeminiBtn').addEventListener('click', saveDataToFirebase);
             document.getElementById('saveRoyalLondonBtn').addEventListener('click', saveDataToFirebase);
             document.getElementById('saveBaringaBtn').addEventListener('click', saveDataToFirebase);
+
+            // ADDED: Save to Cloud button for Dashboard
+            document.getElementById('saveDashboardBtn').addEventListener('click', saveDataToFirebase);
 
             // Add Pension Modal functionality
             document.getElementById('addPensionBtn').addEventListener('click', function() {
@@ -1587,6 +1679,7 @@
             
             years.forEach(year => {
                 const value = pensionData[pensionKey].values[year] || 0.00;
+                const pensionColor = pensionData[pensionKey].color;
                 
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -1600,8 +1693,9 @@
                                onchange="updatePensionValue('${pensionKey}', ${year}, this.value)">
                     </td>
                     <td>
-                        <button class="delete-btn" onclick="removeYear('${pensionKey}', ${year})">
-                            <i class="fas fa-trash"></i> Delete Year
+                        <button class="delete-value-btn" onclick="removeYear('${pensionKey}', ${year})" 
+                                style="background-color: ${pensionColor}">
+                            <i class="fas fa-trash"></i> Delete Value
                         </button>
                     </td>
                 `;
@@ -1631,7 +1725,7 @@
 
         // Remove year from a pension - FIXED: Allow removal of last year
         function removeYear(pensionKey, year) {
-            if (confirm(`Are you sure you want to remove year ${year} from ${pensionData[pensionKey].name}?`)) {
+            if (confirm(`Are you sure you want to remove the value for year ${year} from ${pensionData[pensionKey].name}?`)) {
                 delete pensionData[pensionKey].values[year];
                 
                 // Update UI
@@ -1646,7 +1740,7 @@
                 // Save to Firebase
                 saveDataToFirebase();
                 
-                showSaveStatus(`Year ${year} removed from ${pensionData[pensionKey].name}`, true);
+                showSaveStatus(`Year ${year} value removed from ${pensionData[pensionKey].name}`, true);
             }
         }
 

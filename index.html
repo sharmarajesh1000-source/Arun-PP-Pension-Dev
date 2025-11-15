@@ -406,6 +406,8 @@
 
         .btn-danger:hover {
             background: linear-gradient(45deg, #ff0000, #cc0000);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 0, 0, 0.4);
         }
 
         .btn-success {
@@ -786,7 +788,7 @@
             flex-wrap: wrap;
         }
 
-        /* Provider card actions */
+        /* Provider card actions - REMOVED delete button from here */
         .provider-actions {
             display: flex;
             gap: 10px;
@@ -823,6 +825,11 @@
 
         .legend-text {
             color: var(--accent3);
+        }
+
+        /* Pension tab header actions - REMOVED since we're moving buttons to bottom */
+        .pension-header-actions {
+            display: none;
         }
     </style>
 </head>
@@ -878,7 +885,7 @@
         <div class="tab-content active" id="overview">
             <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
             
-            <!-- ADDED: Save to Cloud button on Dashboard -->
+            <!-- Save to Cloud button on Dashboard -->
             <div class="dashboard-actions">
                 <button class="btn btn-success" id="saveDashboardBtn">
                     <i class="fas fa-cloud-upload-alt"></i> Save All to Cloud
@@ -909,14 +916,14 @@
                 </div>
             </div>
             
-            <!-- ADDED: Charts Row with Total Chart and Pie Chart -->
+            <!-- Charts Row with Total Chart and Pie Chart -->
             <div class="charts-row">
                 <!-- Total Combined Chart in Dashboard -->
                 <div class="chart-container">
                     <canvas id="totalChart"></canvas>
                 </div>
                 
-                <!-- ADDED: Pie Chart for Pension Distribution -->
+                <!-- Pie Chart for Pension Distribution -->
                 <div class="chart-container">
                     <canvas id="pensionPieChart"></canvas>
                     <div class="pie-legend" id="pieLegend">
@@ -941,6 +948,7 @@
 
         <div class="tab-content" id="capGemini">
             <h2><i class="fas fa-building"></i> CapGemini Pension</h2>
+            
             <div class="chart-container">
                 <canvas id="capGeminiChart"></canvas>
             </div>
@@ -963,6 +971,10 @@
                 <button class="btn" id="addCapGeminiYearBtnMobile">
                     <i class="fas fa-plus"></i> Add New Year
                 </button>
+                <!-- MOVED: Delete Pension button to bottom between Add New Year and Save to Cloud -->
+                <button class="btn btn-danger" id="deleteCapGeminiPensionBtn">
+                    <i class="fas fa-trash"></i> Delete Pension
+                </button>
                 <button class="btn" id="saveCapGeminiBtn">
                     <i class="fas fa-cloud-upload-alt"></i> Save to Cloud
                 </button>
@@ -971,6 +983,7 @@
 
         <div class="tab-content" id="royalLondon">
             <h2><i class="fas fa-landmark"></i> Royal London Pension</h2>
+            
             <div class="chart-container">
                 <canvas id="royalLondonChart"></canvas>
             </div>
@@ -993,6 +1006,10 @@
                 <button class="btn" id="addRoyalLondonYearBtnMobile">
                     <i class="fas fa-plus"></i> Add New Year
                 </button>
+                <!-- MOVED: Delete Pension button to bottom between Add New Year and Save to Cloud -->
+                <button class="btn btn-danger" id="deleteRoyalLondonPensionBtn">
+                    <i class="fas fa-trash"></i> Delete Pension
+                </button>
                 <button class="btn" id="saveRoyalLondonBtn">
                     <i class="fas fa-cloud-upload-alt"></i> Save to Cloud
                 </button>
@@ -1001,6 +1018,7 @@
 
         <div class="tab-content" id="baringa">
             <h2><i class="fas fa-chart-pie"></i> Baringa Pension</h2>
+            
             <div class="chart-container">
                 <canvas id="baringaChart"></canvas>
             </div>
@@ -1022,6 +1040,10 @@
             <div class="actions">
                 <button class="btn" id="addBaringaYearBtnMobile">
                     <i class="fas fa-plus"></i> Add New Year
+                </button>
+                <!-- MOVED: Delete Pension button to bottom between Add New Year and Save to Cloud -->
+                <button class="btn btn-danger" id="deleteBaringaPensionBtn">
+                    <i class="fas fa-trash"></i> Delete Pension
                 </button>
                 <button class="btn" id="saveBaringaBtn">
                     <i class="fas fa-cloud-upload-alt"></i> Save to Cloud
@@ -1282,6 +1304,7 @@
                 const growth = previousValue > 0 ? ((currentValue - previousValue) / previousValue * 100) : 0;
                 const yearsCount = Object.keys(pension.values).filter(year => pension.values[year] > 0).length;
                 
+                // UPDATED: Removed delete button from provider cards
                 card.innerHTML = `
                     <h3><i class="fas fa-piggy-bank"></i> ${pension.name}</h3>
                     <div class="current-value">${formatCurrency(currentValue)}</div>
@@ -1301,22 +1324,9 @@
                             <div class="stat-label">Current Value</div>
                         </div>
                     </div>
-                    <div class="provider-actions">
-                        <button class="btn btn-warning delete-pension-btn" data-pension="${pensionKey}">
-                            <i class="fas fa-trash"></i> Delete Pension
-                        </button>
-                    </div>
                 `;
                 
                 providerCardsContainer.appendChild(card);
-            });
-
-            // Add event listeners for delete pension buttons
-            document.querySelectorAll('.delete-pension-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const pensionKey = this.getAttribute('data-pension');
-                    deletePension(pensionKey);
-                });
             });
         }
 
@@ -1452,6 +1462,7 @@
             
             newTabContent.innerHTML = `
                 <h2><i class="fas fa-piggy-bank"></i> ${name}</h2>
+                
                 <div class="chart-container">
                     <canvas id="${key}Chart"></canvas>
                 </div>
@@ -1473,6 +1484,10 @@
                 <div class="actions">
                     <button class="btn add-year-btn" data-pension="${key}">
                         <i class="fas fa-plus"></i> Add New Year
+                    </button>
+                    <!-- MOVED: Delete Pension button to bottom between Add New Year and Save to Cloud -->
+                    <button class="btn btn-danger delete-pension-tab-btn" data-pension="${key}">
+                        <i class="fas fa-trash"></i> Delete Pension
                     </button>
                     <button class="btn save-pension-btn" data-pension="${key}">
                         <i class="fas fa-cloud-upload-alt"></i> Save to Cloud
@@ -1500,6 +1515,7 @@
             
             document.querySelector(`.add-year-btn[data-pension="${key}"]`).addEventListener('click', () => addYearForPension(key));
             document.querySelector(`.save-pension-btn[data-pension="${key}"]`).addEventListener('click', saveDataToFirebase);
+            document.querySelector(`.delete-pension-tab-btn[data-pension="${key}"]`).addEventListener('click', () => deletePension(key));
         }
 
         // Initialize the dashboard
@@ -1539,6 +1555,11 @@
             document.getElementById('addRoyalLondonYearBtnMobile').addEventListener('click', () => addYearForPension('royalLondon'));
             document.getElementById('addBaringaYearBtnMobile').addEventListener('click', () => addYearForPension('baringa'));
 
+            // MOVED: Delete Pension buttons are now in the actions div at the bottom
+            document.getElementById('deleteCapGeminiPensionBtn').addEventListener('click', () => deletePension('capGemini'));
+            document.getElementById('deleteRoyalLondonPensionBtn').addEventListener('click', () => deletePension('royalLondon'));
+            document.getElementById('deleteBaringaPensionBtn').addEventListener('click', () => deletePension('baringa'));
+
             // Calculate button for predictor
             document.getElementById('calculateBtn').addEventListener('click', calculateProjection);
 
@@ -1547,7 +1568,7 @@
             document.getElementById('saveRoyalLondonBtn').addEventListener('click', saveDataToFirebase);
             document.getElementById('saveBaringaBtn').addEventListener('click', saveDataToFirebase);
 
-            // ADDED: Save to Cloud button for Dashboard
+            // Save to Cloud button for Dashboard
             document.getElementById('saveDashboardBtn').addEventListener('click', saveDataToFirebase);
 
             // Add Pension Modal functionality
@@ -1891,7 +1912,7 @@
                 }
             });
             
-            // ADDED: Pie chart for pension distribution
+            // Pie chart for pension distribution
             initializePieChart();
             
             // Individual pension charts

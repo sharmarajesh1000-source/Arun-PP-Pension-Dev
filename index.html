@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    // Version 1.0 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arun Pensions Dashboard</title>
@@ -90,19 +89,23 @@
     
     <style>
         :root {
-            --primary: #000000;
-            --secondary: #1a1a1a;
-            --accent1: #00ff00;
-            --accent2: #00cc00;
-            --accent3: #009900;
+            --primary: #121212;
+            --secondary: #1e1e1e;
+            --accent1: #6a0dad; /* Deep Purple */
+            --accent2: #00bcd4; /* Teal */
+            --accent3: #87ceeb; /* Sky Blue */
+            --accent4: #4a00e0; /* Darker Purple */
             --light: #ffffff;
             --dark: #000000;
-            --success: #00ff00;
-            --warning: #ffff00;
-            --danger: #ff0000;
-            --card-bg: rgba(255, 255, 255, 0.1);
-            --shadow: 0 4px 6px rgba(0, 255, 0, 0.2);
-            --border: 1px solid rgba(0, 255, 0, 0.3);
+            --success: #00e676;
+            --warning: #ffeb3b;
+            --danger: #ff5252;
+            --card-bg: rgba(30, 30, 46, 0.7);
+            --shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            --border: 1px solid rgba(106, 13, 173, 0.3);
+            --gradient-primary: linear-gradient(135deg, #6a0dad 0%, #4a00e0 100%);
+            --gradient-secondary: linear-gradient(135deg, #00bcd4 0%, #00838f 100%);
+            --gradient-accent: linear-gradient(135deg, #87ceeb 0%, #4682b4 100%);
         }
 
         * {
@@ -113,7 +116,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: var(--light);
             min-height: 100vh;
             padding: 20px;
@@ -129,24 +132,37 @@
             margin-bottom: 30px;
             padding: 30px;
             background: var(--card-bg);
-            border-radius: 15px;
+            border-radius: 20px;
             backdrop-filter: blur(10px);
             border: var(--border);
             box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 10px;
-            background: linear-gradient(45deg, #00ff00, #ffffff);
+            background: linear-gradient(45deg, var(--accent3), var(--accent2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            text-shadow: 0 0 20px rgba(135, 206, 235, 0.3);
+            font-weight: 700;
         }
 
         .subtitle {
             font-size: 1.2rem;
-            color: #00cc00;
+            color: var(--accent3);
             font-weight: 500;
         }
 
@@ -160,46 +176,58 @@
         .card {
             background: var(--card-bg);
             padding: 25px;
-            border-radius: 15px;
+            border-radius: 16px;
             text-align: center;
             backdrop-filter: blur(10px);
             border: var(--border);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-secondary);
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 255, 0, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4);
         }
 
         .card h3 {
             font-size: 1.1rem;
             margin-bottom: 15px;
-            color: #00ff00;
+            color: var(--accent3);
             font-weight: 600;
         }
 
         .value {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
             margin: 10px 0;
-            color: #ffffff;
+            color: var(--light);
         }
 
         .value.positive {
-            color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            color: var(--success);
+            text-shadow: 0 0 10px rgba(0, 230, 118, 0.3);
         }
 
         .value.negative {
-            color: #ff0000;
+            color: var(--danger);
         }
 
         .tabs {
             display: flex;
             background: var(--card-bg);
-            border-radius: 15px 15px 0 0;
+            border-radius: 16px 16px 0 0;
             overflow: hidden;
             backdrop-filter: blur(10px);
             border: var(--border);
@@ -213,32 +241,53 @@
             text-align: center;
             background: transparent;
             border: none;
-            color: #00cc00;
+            color: var(--accent3);
             font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
             border-bottom: 3px solid transparent;
             font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            transition: left 0.3s ease;
+            z-index: -1;
         }
 
         .tab:hover {
-            background: rgba(0, 255, 0, 0.1);
-            color: #00ff00;
+            color: var(--light);
+        }
+
+        .tab:hover::before {
+            left: 0;
         }
 
         .tab.active {
-            background: rgba(0, 255, 0, 0.2);
+            background: rgba(106, 13, 173, 0.2);
             border-bottom: 3px solid var(--accent1);
             font-weight: 600;
-            color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            color: var(--light);
+            text-shadow: 0 0 10px rgba(106, 13, 173, 0.5);
+        }
+
+        .tab.active::before {
+            left: 0;
         }
 
         .tab-content {
             display: none;
             background: var(--card-bg);
             padding: 30px;
-            border-radius: 0 0 15px 15px;
+            border-radius: 0 0 16px 16px;
             backdrop-filter: blur(10px);
             border: var(--border);
             border-top: none;
@@ -253,7 +302,7 @@
         .chart-container {
             background: var(--card-bg);
             padding: 20px;
-            border-radius: 15px;
+            border-radius: 16px;
             margin-bottom: 20px;
             height: 400px;
             backdrop-filter: blur(10px);
@@ -265,8 +314,8 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            background: rgba(0, 255, 0, 0.05);
-            border-radius: 10px;
+            background: rgba(106, 13, 173, 0.05);
+            border-radius: 12px;
             overflow: hidden;
             border: var(--border);
         }
@@ -275,38 +324,38 @@
         .data-table td {
             padding: 15px;
             text-align: left;
-            border-bottom: 1px solid rgba(0, 255, 0, 0.1);
+            border-bottom: 1px solid rgba(106, 13, 173, 0.1);
         }
 
         .data-table th {
-            background: rgba(0, 255, 0, 0.1);
+            background: rgba(106, 13, 173, 0.1);
             font-weight: 600;
-            color: #00ff00;
+            color: var(--accent3);
         }
 
         .data-table input {
             width: 100%;
             padding: 10px;
             background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 255, 0, 0.3);
-            border-radius: 5px;
-            color: #ffffff;
+            border: 1px solid rgba(106, 13, 173, 0.3);
+            border-radius: 8px;
+            color: var(--light);
             font-size: 1rem;
         }
 
         .data-table input:focus {
             outline: none;
             border-color: var(--accent1);
-            background: rgba(0, 255, 0, 0.1);
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+            background: rgba(106, 13, 173, 0.1);
+            box-shadow: 0 0 10px rgba(106, 13, 173, 0.2);
         }
 
         .btn {
             padding: 12px 24px;
-            background: linear-gradient(45deg, #00aa00, #00ff00);
-            color: #000000;
+            background: var(--gradient-primary);
+            color: var(--light);
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 1rem;
             font-weight: 600;
@@ -319,9 +368,9 @@
         }
 
         .btn:hover {
-            background: linear-gradient(45deg, #00ff00, #00aa00);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 255, 0, 0.4);
+            background: var(--gradient-secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 188, 212, 0.4);
         }
 
         .btn-outline {
@@ -333,8 +382,8 @@
 
         .btn-outline:hover {
             background: var(--accent1);
-            color: #000000;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            color: var(--light);
+            box-shadow: 0 0 15px rgba(106, 13, 173, 0.3);
         }
 
         .btn-danger {
@@ -347,11 +396,20 @@
         }
 
         .btn-success {
-            background: linear-gradient(45deg, #00aa00, #00ff00);
+            background: var(--gradient-secondary);
         }
 
         .btn-success:hover {
-            background: linear-gradient(45deg, #00ff00, #00aa00);
+            background: linear-gradient(45deg, #00e676, #00c853);
+        }
+
+        .btn-accent {
+            background: var(--gradient-accent);
+            color: var(--dark);
+        }
+
+        .btn-accent:hover {
+            background: linear-gradient(45deg, #a7d8ff, #87ceeb);
         }
 
         .actions {
@@ -376,23 +434,23 @@
 
         .input-group label {
             font-weight: 600;
-            color: #00ff00;
+            color: var(--accent3);
         }
 
         .input-group input {
             padding: 12px;
-            border: 1px solid rgba(0, 255, 0, 0.3);
+            border: 1px solid rgba(106, 13, 173, 0.3);
             border-radius: 8px;
             background: rgba(0, 0, 0, 0.5);
-            color: #ffffff;
+            color: var(--light);
             font-size: 1rem;
         }
 
         .input-group input:focus {
             outline: none;
             border-color: var(--accent1);
-            background: rgba(0, 255, 0, 0.1);
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+            background: rgba(106, 13, 173, 0.1);
+            box-shadow: 0 0 10px rgba(106, 13, 173, 0.2);
         }
 
         .results {
@@ -405,24 +463,36 @@
         .result-card {
             background: var(--card-bg);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             text-align: center;
             backdrop-filter: blur(10px);
             border: var(--border);
             box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-secondary);
         }
 
         .result-card h4 {
             margin-bottom: 10px;
-            color: #00cc00;
+            color: var(--accent2);
             font-weight: 600;
         }
 
         .result-value {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            color: var(--accent3);
+            text-shadow: 0 0 10px rgba(135, 206, 235, 0.3);
         }
 
         .mobile-only {
@@ -454,7 +524,7 @@
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
         }
 
@@ -465,7 +535,7 @@
             top: 20px;
             right: 20px;
             background: var(--accent1);
-            color: var(--dark);
+            color: var(--light);
             padding: 10px 15px;
             border-radius: 8px;
             font-weight: 600;
@@ -500,12 +570,12 @@
 
         /* Text colors */
         h2, h3 {
-            color: #00ff00;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            color: var(--accent3);
+            text-shadow: 0 0 10px rgba(135, 206, 235, 0.3);
         }
 
         p {
-            color: #00cc00;
+            color: var(--accent3);
         }
 
         /* Provider Cards for Overview */
@@ -519,14 +589,26 @@
         .provider-card {
             background: var(--card-bg);
             padding: 25px;
-            border-radius: 15px;
+            border-radius: 16px;
             border: var(--border);
             box-shadow: var(--shadow);
             backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .provider-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
         }
 
         .provider-card h3 {
-            color: #00ff00;
+            color: var(--accent3);
             margin-bottom: 15px;
             font-size: 1.3rem;
         }
@@ -541,36 +623,36 @@
         .stat-item {
             text-align: center;
             padding: 15px;
-            background: rgba(0, 255, 0, 0.1);
+            background: rgba(106, 13, 173, 0.1);
             border-radius: 10px;
-            border: 1px solid rgba(0, 255, 0, 0.2);
+            border: 1px solid rgba(106, 13, 173, 0.2);
         }
 
         .stat-value {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #ffffff;
+            color: var(--light);
             margin-bottom: 5px;
         }
 
         .stat-label {
             font-size: 0.9rem;
-            color: #00cc00;
+            color: var(--accent3);
         }
 
         .current-value {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #00ff00;
+            color: var(--accent2);
             margin: 10px 0;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+            text-shadow: 0 0 10px rgba(0, 188, 212, 0.3);
         }
 
         /* Delete button styling */
         .delete-btn {
-            background: rgba(255, 0, 0, 0.2);
-            border: 1px solid rgba(255, 0, 0, 0.5);
-            color: #ff6666;
+            background: rgba(255, 82, 82, 0.2);
+            border: 1px solid rgba(255, 82, 82, 0.5);
+            color: #ff8a8a;
             padding: 8px 15px;
             border-radius: 5px;
             cursor: pointer;
@@ -578,22 +660,22 @@
         }
 
         .delete-btn:hover {
-            background: rgba(255, 0, 0, 0.4);
-            color: #ffffff;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            background: rgba(255, 82, 82, 0.4);
+            color: var(--light);
+            box-shadow: 0 0 10px rgba(255, 82, 82, 0.3);
         }
 
         /* Empty state styling */
         .empty-state {
             text-align: center;
             padding: 40px;
-            color: #00cc00;
+            color: var(--accent3);
         }
 
         .empty-state i {
             font-size: 3rem;
             margin-bottom: 20px;
-            color: #00ff00;
+            color: var(--accent2);
         }
 
         .empty-state h3 {
@@ -603,6 +685,75 @@
         .empty-state p {
             margin-bottom: 20px;
         }
+
+        /* Add Pension Button */
+        .add-pension-section {
+            margin: 30px 0;
+            text-align: center;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 2px dashed rgba(135, 206, 235, 0.3);
+        }
+
+        .add-pension-section h3 {
+            margin-bottom: 20px;
+            color: var(--accent3);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            border: var(--border);
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            color: var(--accent3);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-option.selected {
+            border-color: var(--light);
+        }
     </style>
 </head>
 <body>
@@ -611,6 +762,32 @@
         <i class="fas fa-spinner fa-spin"></i> Saving...
     </div>
     <div class="save-status" id="saveStatus"></div>
+
+    <!-- Add Pension Modal -->
+    <div class="modal" id="addPensionModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-plus-circle"></i> Add New Pension</h3>
+            <div class="input-group">
+                <label for="newPensionName">Pension Name</label>
+                <input type="text" id="newPensionName" placeholder="Enter pension provider name">
+            </div>
+            <div class="input-group">
+                <label>Select Color</label>
+                <div class="color-options">
+                    <div class="color-option selected" style="background-color: #6a0dad;" data-color="#6a0dad"></div>
+                    <div class="color-option" style="background-color: #00bcd4;" data-color="#00bcd4"></div>
+                    <div class="color-option" style="background-color: #87ceeb;" data-color="#87ceeb"></div>
+                    <div class="color-option" style="background-color: #9c27b0;" data-color="#9c27b0"></div>
+                    <div class="color-option" style="background-color: #2196f3;" data-color="#2196f3"></div>
+                    <div class="color-option" style="background-color: #4caf50;" data-color="#4caf50"></div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="cancelAddPension">Cancel</button>
+                <button class="btn btn-success" id="confirmAddPension">Add Pension</button>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <header>
@@ -631,7 +808,7 @@
         <div class="tab-content active" id="overview">
             <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
             
-            <!-- Summary Cards - NOW ONLY IN DASHBOARD TAB -->
+            <!-- Summary Cards -->
             <div class="summary-cards">
                 <div class="card">
                     <h3><i class="fas fa-pound-sign"></i> Total (<span id="year-label-1">2023</span>)</h3>
@@ -660,84 +837,17 @@
                 <canvas id="totalChart"></canvas>
             </div>
             
-            <div class="provider-cards">
-                <div class="provider-card">
-                    <h3><i class="fas fa-building"></i> CapGemini Pension</h3>
-                    <div class="current-value" id="capgemini-current">£0.00</div>
-                    <p>Current value</p>
-                    
-                    <div class="provider-stats">
-                        <div class="stat-item">
-                            <div class="stat-value" id="capgemini-growth">+0.0%</div>
-                            <div class="stat-label">Growth</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="capgemini-years">0</div>
-                            <div class="stat-label">Years</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="capgemini-annual">£0.00</div>
-                            <div class="stat-label">Annual Return</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="provider-card">
-                    <h3><i class="fas fa-landmark"></i> Royal London</h3>
-                    <div class="current-value" id="royallondon-current">£0.00</div>
-                    <p>Current value</p>
-                    
-                    <div class="provider-stats">
-                        <div class="stat-item">
-                            <div class="stat-value" id="royallondon-growth">+0.0%</div>
-                            <div class="stat-label">Growth</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="royallondon-years">0</div>
-                            <div class="stat-label">Years</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="royallondon-annual">£0.00</div>
-                            <div class="stat-label">Annual Return</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="provider-card">
-                    <h3><i class="fas fa-chart-pie"></i> Baringa</h3>
-                    <div class="current-value" id="baringa-current">£0.00</div>
-                    <p>Current value</p>
-                    
-                    <div class="provider-stats">
-                        <div class="stat-item">
-                            <div class="stat-value" id="baringa-growth">+0.0%</div>
-                            <div class="stat-label">Growth</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="baringa-years">0</div>
-                            <div class="stat-label">Years</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="baringa-annual">£0.00</div>
-                            <div class="stat-label">Annual Return</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="provider-cards" id="providerCardsContainer">
+                <!-- Provider cards will be dynamically generated -->
             </div>
 
-            <div class="desktop-actions">
-                <h3>Quick Actions</h3>
-                <div class="actions">
-                    <button class="btn" id="addCapGeminiYearBtn">
-                        <i class="fas fa-plus"></i> Add Year to CapGemini
-                    </button>
-                    <button class="btn" id="addRoyalLondonYearBtn">
-                        <i class="fas fa-plus"></i> Add Year to Royal London
-                    </button>
-                    <button class="btn" id="addBaringaYearBtn">
-                        <i class="fas fa-plus"></i> Add Year to Baringa
-                    </button>
-                </div>
+            <!-- ADDED: Add Another Pension Section -->
+            <div class="add-pension-section">
+                <h3><i class="fas fa-plus-circle"></i> Manage Your Pensions</h3>
+                <p>Add another pension provider to track all your retirement savings in one place</p>
+                <button class="btn btn-accent" id="addPensionBtn">
+                    <i class="fas fa-plus"></i> Add Another Pension
+                </button>
             </div>
         </div>
 
@@ -764,6 +874,9 @@
             <div class="actions">
                 <button class="btn" id="addCapGeminiYearBtnMobile">
                     <i class="fas fa-plus"></i> Add New Year
+                </button>
+                <button class="btn" id="saveCapGeminiBtn">
+                    <i class="fas fa-cloud-upload-alt"></i> Save to Cloud
                 </button>
             </div>
         </div>
@@ -792,6 +905,9 @@
                 <button class="btn" id="addRoyalLondonYearBtnMobile">
                     <i class="fas fa-plus"></i> Add New Year
                 </button>
+                <button class="btn" id="saveRoyalLondonBtn">
+                    <i class="fas fa-cloud-upload-alt"></i> Save to Cloud
+                </button>
             </div>
         </div>
 
@@ -818,6 +934,9 @@
             <div class="actions">
                 <button class="btn" id="addBaringaYearBtnMobile">
                     <i class="fas fa-plus"></i> Add New Year
+                </button>
+                <button class="btn" id="saveBaringaBtn">
+                    <i class="fas fa-cloud-upload-alt"></i> Save to Cloud
                 </button>
             </div>
         </div>
@@ -889,17 +1008,17 @@
         let pensionData = {
             capGemini: {
                 name: "CapGemini Pension",
-                color: "#00ff00",
+                color: "#6a0dad",
                 values: {}
             },
             royalLondon: {
                 name: "Royal London",
-                color: "#ff4444",
+                color: "#00bcd4",
                 values: {}
             },
             baringa: {
                 name: "Baringa",
-                color: "#ffff00",
+                color: "#87ceeb",
                 values: {}
             }
         };
@@ -1049,59 +1168,54 @@
 
         // Helper function to get total value for a specific year
         function getTotalValueForYear(year) {
-            return (pensionData.capGemini.values[year] || 0) + 
-                   (pensionData.royalLondon.values[year] || 0) + 
-                   (pensionData.baringa.values[year] || 0);
+            let total = 0;
+            Object.values(pensionData).forEach(pension => {
+                total += pension.values[year] || 0;
+            });
+            return total;
         }
 
-        // Update provider cards on dashboard - FIXED: Handle empty data
+        // Update provider cards on dashboard - FIXED: Handle empty data and dynamic pensions
         function updateProviderCards() {
+            const providerCardsContainer = document.getElementById('providerCardsContainer');
+            providerCardsContainer.innerHTML = '';
+            
             const latestYear = getLatestYear();
-            if (latestYear === null) {
-                // No data - set all to 0
-                ['capgemini', 'royallondon', 'baringa'].forEach(prefix => {
-                    document.getElementById(`${prefix}-current`).textContent = '£0.00';
-                    document.getElementById(`${prefix}-growth`).textContent = '+0.0%';
-                    document.getElementById(`${prefix}-years`).textContent = '0';
-                    document.getElementById(`${prefix}-annual`).textContent = '£0.00';
-                });
-                return;
-            }
             
-            const previousYear = latestYear - 1;
-            
-            // CapGemini
-            const capGeminiCurrent = pensionData.capGemini.values[latestYear] || 0;
-            const capGeminiPrevious = pensionData.capGemini.values[previousYear] || 0;
-            const capGeminiGrowth = capGeminiPrevious > 0 ? ((capGeminiCurrent - capGeminiPrevious) / capGeminiPrevious * 100) : 0;
-            const capGeminiYears = Object.keys(pensionData.capGemini.values).filter(year => pensionData.capGemini.values[year] > 0).length;
-            
-            document.getElementById('capgemini-current').textContent = formatCurrency(capGeminiCurrent);
-            document.getElementById('capgemini-growth').textContent = `${capGeminiGrowth >= 0 ? '+' : ''}${capGeminiGrowth.toFixed(1)}%`;
-            document.getElementById('capgemini-years').textContent = capGeminiYears;
-            document.getElementById('capgemini-annual').textContent = formatCurrency(capGeminiCurrent);
-            
-            // Royal London
-            const royalLondonCurrent = pensionData.royalLondon.values[latestYear] || 0;
-            const royalLondonPrevious = pensionData.royalLondon.values[previousYear] || 0;
-            const royalLondonGrowth = royalLondonPrevious > 0 ? ((royalLondonCurrent - royalLondonPrevious) / royalLondonPrevious * 100) : 0;
-            const royalLondonYears = Object.keys(pensionData.royalLondon.values).filter(year => pensionData.royalLondon.values[year] > 0).length;
-            
-            document.getElementById('royallondon-current').textContent = formatCurrency(royalLondonCurrent);
-            document.getElementById('royallondon-growth').textContent = `${royalLondonGrowth >= 0 ? '+' : ''}${royalLondonGrowth.toFixed(1)}%`;
-            document.getElementById('royallondon-years').textContent = royalLondonYears;
-            document.getElementById('royallondon-annual').textContent = formatCurrency(royalLondonCurrent);
-            
-            // Baringa
-            const baringaCurrent = pensionData.baringa.values[latestYear] || 0;
-            const baringaPrevious = pensionData.baringa.values[previousYear] || 0;
-            const baringaGrowth = baringaPrevious > 0 ? ((baringaCurrent - baringaPrevious) / baringaPrevious * 100) : 0;
-            const baringaYears = Object.keys(pensionData.baringa.values).filter(year => pensionData.baringa.values[year] > 0).length;
-            
-            document.getElementById('baringa-current').textContent = formatCurrency(baringaCurrent);
-            document.getElementById('baringa-growth').textContent = `${baringaGrowth >= 0 ? '+' : ''}${baringaGrowth.toFixed(1)}%`;
-            document.getElementById('baringa-years').textContent = baringaYears;
-            document.getElementById('baringa-annual').textContent = formatCurrency(baringaCurrent);
+            Object.keys(pensionData).forEach(pensionKey => {
+                const pension = pensionData[pensionKey];
+                const card = document.createElement('div');
+                card.className = 'provider-card';
+                
+                const currentValue = latestYear ? (pension.values[latestYear] || 0) : 0;
+                const previousYear = latestYear ? latestYear - 1 : null;
+                const previousValue = previousYear ? (pension.values[previousYear] || 0) : 0;
+                const growth = previousValue > 0 ? ((currentValue - previousValue) / previousValue * 100) : 0;
+                const yearsCount = Object.keys(pension.values).filter(year => pension.values[year] > 0).length;
+                
+                card.innerHTML = `
+                    <h3><i class="fas fa-piggy-bank"></i> ${pension.name}</h3>
+                    <div class="current-value">${formatCurrency(currentValue)}</div>
+                    <p>Current value</p>
+                    
+                    <div class="provider-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">${growth >= 0 ? '+' : ''}${growth.toFixed(1)}%</div>
+                            <div class="stat-label">Growth</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${yearsCount}</div>
+                            <div class="stat-label">Years</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${formatCurrency(currentValue)}</div>
+                            <div class="stat-label">Current Value</div>
+                        </div>
+                    </div>
+                `;
+                
+                providerCardsContainer.appendChild(card);
+            });
         }
 
         // Update summary cards - FIXED: Handle empty data
@@ -1151,6 +1265,103 @@
             document.getElementById('years-range').textContent = `${earliestYear} - ${latestYear}`;
         }
 
+        // Add new pension function
+        function addNewPension(name, color) {
+            // Create a unique key for the new pension
+            const key = name.toLowerCase().replace(/\s+/g, '');
+            
+            // Add to pension data
+            pensionData[key] = {
+                name: name,
+                color: color,
+                values: {}
+            };
+            
+            // Create a new tab for the pension
+            createPensionTab(key, name);
+            
+            // Update UI
+            updateProviderCards();
+            updateCharts();
+            
+            // Save to Firebase
+            saveDataToFirebase();
+            
+            // Show success message
+            showSaveStatus(`Added new pension: ${name}`, true);
+        }
+
+        // Create a new tab for a pension
+        function createPensionTab(key, name) {
+            // Create new tab button
+            const tabsContainer = document.querySelector('.tabs');
+            const newTab = document.createElement('button');
+            newTab.className = 'tab';
+            newTab.setAttribute('data-tab', key);
+            newTab.textContent = name;
+            
+            // Add before the Predictor tab
+            const predictorTab = document.querySelector('.tab[data-tab="predictor"]');
+            tabsContainer.insertBefore(newTab, predictorTab);
+            
+            // Create new tab content
+            const tabContentsContainer = document.querySelector('.container');
+            const newTabContent = document.createElement('div');
+            newTabContent.className = 'tab-content';
+            newTabContent.id = key;
+            
+            newTabContent.innerHTML = `
+                <h2><i class="fas fa-piggy-bank"></i> ${name}</h2>
+                <div class="chart-container">
+                    <canvas id="${key}Chart"></canvas>
+                </div>
+                
+                <h3>Data Table</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Value (£)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="${key}TableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+                
+                <div class="actions">
+                    <button class="btn add-year-btn" data-pension="${key}">
+                        <i class="fas fa-plus"></i> Add New Year
+                    </button>
+                    <button class="btn save-pension-btn" data-pension="${key}">
+                        <i class="fas fa-cloud-upload-alt"></i> Save to Cloud
+                    </button>
+                </div>
+            `;
+            
+            // Add before the Predictor tab content
+            const predictorContent = document.getElementById('predictor');
+            tabContentsContainer.insertBefore(newTabContent, predictorContent);
+            
+            // Add event listeners for the new buttons
+            newTab.addEventListener('click', function() {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                document.getElementById(key).classList.add('active');
+                
+                // Update charts when switching tabs
+                setTimeout(updateCharts, 100);
+            });
+            
+            document.querySelector(`.add-year-btn[data-pension="${key}"]`).addEventListener('click', () => addYearForPension(key));
+            document.querySelector(`.save-pension-btn[data-pension="${key}"]`).addEventListener('click', saveDataToFirebase);
+        }
+
         // Initialize the dashboard
         document.addEventListener('DOMContentLoaded', async function() {
             console.log("Dashboard initialized with Firebase Firestore support");
@@ -1183,12 +1394,7 @@
                 });
             });
 
-            // Add year buttons - desktop
-            document.getElementById('addCapGeminiYearBtn').addEventListener('click', () => addYearForPension('capGemini'));
-            document.getElementById('addRoyalLondonYearBtn').addEventListener('click', () => addYearForPension('royalLondon'));
-            document.getElementById('addBaringaYearBtn').addEventListener('click', () => addYearForPension('baringa'));
-
-            // Add year buttons - mobile
+            // Add year buttons - mobile (keep only mobile buttons)
             document.getElementById('addCapGeminiYearBtnMobile').addEventListener('click', () => addYearForPension('capGemini'));
             document.getElementById('addRoyalLondonYearBtnMobile').addEventListener('click', () => addYearForPension('royalLondon'));
             document.getElementById('addBaringaYearBtnMobile').addEventListener('click', () => addYearForPension('baringa'));
@@ -1196,18 +1402,47 @@
             // Calculate button for predictor
             document.getElementById('calculateBtn').addEventListener('click', calculateProjection);
 
-            // Manual save button
-            const saveButton = document.createElement('button');
-            saveButton.className = 'btn';
-            saveButton.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Save to Cloud';
-            saveButton.style.marginLeft = '15px';
-            saveButton.addEventListener('click', saveDataToFirebase);
-            
-            // Add save button to desktop actions
-            const desktopActions = document.querySelector('.desktop-actions');
-            if (desktopActions) {
-                desktopActions.appendChild(saveButton);
-            }
+            // Save to Cloud buttons for individual pension tabs
+            document.getElementById('saveCapGeminiBtn').addEventListener('click', saveDataToFirebase);
+            document.getElementById('saveRoyalLondonBtn').addEventListener('click', saveDataToFirebase);
+            document.getElementById('saveBaringaBtn').addEventListener('click', saveDataToFirebase);
+
+            // Add Pension Modal functionality
+            document.getElementById('addPensionBtn').addEventListener('click', function() {
+                document.getElementById('addPensionModal').style.display = 'flex';
+            });
+
+            document.getElementById('cancelAddPension').addEventListener('click', function() {
+                document.getElementById('addPensionModal').style.display = 'none';
+            });
+
+            document.getElementById('confirmAddPension').addEventListener('click', function() {
+                const name = document.getElementById('newPensionName').value.trim();
+                const selectedColor = document.querySelector('.color-option.selected').getAttribute('data-color');
+                
+                if (name) {
+                    addNewPension(name, selectedColor);
+                    document.getElementById('addPensionModal').style.display = 'none';
+                    document.getElementById('newPensionName').value = '';
+                } else {
+                    alert('Please enter a pension name');
+                }
+            });
+
+            // Color selection
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === document.getElementById('addPensionModal')) {
+                    document.getElementById('addPensionModal').style.display = 'none';
+                }
+            });
 
             // Load data from Firebase
             await loadDataFromFirebase();
@@ -1320,26 +1555,28 @@
             alert(`Successfully added year ${newYear} to ${pensionData[pensionKey].name} with initial value of £0.00.`);
         }
 
-        // Initialize data tables - FIXED: Handle empty data
+        // Initialize data tables - FIXED: Handle empty data and dynamic pensions
         function initializeTables() {
             const years = getAllYears();
             
             // Individual pension tables
-            initializePensionTable('capGemini', years);
-            initializePensionTable('royalLondon', years);
-            initializePensionTable('baringa', years);
+            Object.keys(pensionData).forEach(pensionKey => {
+                initializePensionTable(pensionKey, years);
+            });
         }
 
         // Initialize individual pension table - FIXED: Show empty state when no data
         function initializePensionTable(pensionKey, years) {
             const tableBody = document.getElementById(`${pensionKey}TableBody`);
+            if (!tableBody) return; // Skip if table doesn't exist yet
+            
             tableBody.innerHTML = '';
             
             if (years.length === 0) {
                 // Show empty state
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td colspan="3" style="text-align: center; padding: 30px; color: #00cc00;">
+                    <td colspan="3" style="text-align: center; padding: 30px; color: #00bcd4;">
                         <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
                         No data yet. Click "Add New Year" to get started.
                     </td>
@@ -1413,16 +1650,16 @@
             }
         }
 
-        // Initialize charts - FIXED: Handle empty data
+        // Initialize charts - FIXED: Handle empty data and dynamic pensions
         function initializeCharts() {
             const years = getAllYears();
             
             if (years.length === 0) {
                 // No data - display empty charts
                 initializeEmptyChart('totalChart', 'Total Combined Value');
-                initializeEmptyChart('capGeminiChart', pensionData.capGemini.name);
-                initializeEmptyChart('royalLondonChart', pensionData.royalLondon.name);
-                initializeEmptyChart('baringaChart', pensionData.baringa.name);
+                Object.keys(pensionData).forEach(pensionKey => {
+                    initializeEmptyChart(`${pensionKey}Chart`, pensionData[pensionKey].name);
+                });
                 return;
             }
             
@@ -1442,13 +1679,13 @@
                     datasets: [{
                         label: 'Total Combined Value',
                         data: totalData,
-                        borderColor: '#00ff00',
-                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        borderColor: '#6a0dad',
+                        backgroundColor: 'rgba(106, 13, 173, 0.1)',
                         borderWidth: 3,
                         fill: true,
                         tension: 0.4,
-                        pointBackgroundColor: '#00ff00',
-                        pointBorderColor: '#000000',
+                        pointBackgroundColor: '#6a0dad',
+                        pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
                         pointRadius: 5,
                         pointHoverRadius: 7
@@ -1509,29 +1746,32 @@
             });
             
             // Individual pension charts
-            initializePensionChart('capGemini', years);
-            initializePensionChart('royalLondon', years);
-            initializePensionChart('baringa', years);
+            Object.keys(pensionData).forEach(pensionKey => {
+                initializePensionChart(pensionKey, years);
+            });
         }
 
-        // Initialize empty chart - NEW FUNCTION
+        // Initialize empty chart
         function initializeEmptyChart(chartId, label) {
-            const ctx = document.getElementById(chartId).getContext('2d');
+            const ctx = document.getElementById(chartId);
+            if (!ctx) return; // Skip if chart doesn't exist yet
+            
+            const chartCtx = ctx.getContext('2d');
             
             // Destroy existing chart if it exists
             if (chartInstances[chartId]) {
                 chartInstances[chartId].destroy();
             }
             
-            chartInstances[chartId] = new Chart(ctx, {
+            chartInstances[chartId] = new Chart(chartCtx, {
                 type: 'line',
                 data: {
                     labels: [],
                     datasets: [{
                         label: label,
                         data: [],
-                        borderColor: '#00ff00',
-                        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                        borderColor: '#6a0dad',
+                        backgroundColor: 'rgba(106, 13, 173, 0.1)',
                         borderWidth: 3,
                         fill: true,
                         tension: 0.4
@@ -1579,7 +1819,10 @@
 
         // Initialize individual pension chart
         function initializePensionChart(pensionKey, years) {
-            const ctx = document.getElementById(`${pensionKey}Chart`).getContext('2d');
+            const ctx = document.getElementById(`${pensionKey}Chart`);
+            if (!ctx) return; // Skip if chart doesn't exist yet
+            
+            const chartCtx = ctx.getContext('2d');
             const data = years.map(year => pensionData[pensionKey].values[year] || 0);
             
             // Destroy existing chart if it exists
@@ -1587,7 +1830,7 @@
                 chartInstances[`${pensionKey}Chart`].destroy();
             }
             
-            chartInstances[`${pensionKey}Chart`] = new Chart(ctx, {
+            chartInstances[`${pensionKey}Chart`] = new Chart(chartCtx, {
                 type: 'line',
                 data: {
                     labels: years,
@@ -1600,7 +1843,7 @@
                         fill: true,
                         tension: 0.4,
                         pointBackgroundColor: pensionData[pensionKey].color,
-                        pointBorderColor: '#000000',
+                        pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
                         pointRadius: 5,
                         pointHoverRadius: 7
@@ -1686,7 +1929,7 @@
             console.log("=====================================\n");
         };
 
-        // Function to verify 2023 and 2024 calculations
+        // Function to verify calculations
         window.verifyTotals = function() {
             const years = getAllYears();
             
@@ -1708,35 +1951,37 @@
             console.log("╚═══════════════════════════════════════════════════════╝\n");
             
             // Get individual provider values for second most recent year
-            const capGeminiYear1 = pensionData.capGemini.values[secondMostRecentYear] || 0;
-            const royalLondonYear1 = pensionData.royalLondon.values[secondMostRecentYear] || 0;
-            const baringaYear1 = pensionData.baringa.values[secondMostRecentYear] || 0;
+            const year1Values = {};
+            let totalYear1 = 0;
+            Object.keys(pensionData).forEach(pensionKey => {
+                year1Values[pensionKey] = pensionData[pensionKey].values[secondMostRecentYear] || 0;
+                totalYear1 += year1Values[pensionKey];
+            });
             
             // Get individual provider values for most recent year
-            const capGeminiYear2 = pensionData.capGemini.values[mostRecentYear] || 0;
-            const royalLondonYear2 = pensionData.royalLondon.values[mostRecentYear] || 0;
-            const baringaYear2 = pensionData.baringa.values[mostRecentYear] || 0;
-            
-            // Calculate totals
-            const totalYear1 = capGeminiYear1 + royalLondonYear1 + baringaYear1;
-            const totalYear2 = capGeminiYear2 + royalLondonYear2 + baringaYear2;
+            const year2Values = {};
+            let totalYear2 = 0;
+            Object.keys(pensionData).forEach(pensionKey => {
+                year2Values[pensionKey] = pensionData[pensionKey].values[mostRecentYear] || 0;
+                totalYear2 += year2Values[pensionKey];
+            });
             
             // Get the displayed values from DOM
             const displayedTotalYear1 = document.getElementById('total-year-1').textContent;
             const displayedTotalYear2 = document.getElementById('total-year-2').textContent;
             
             console.log(`--- ${secondMostRecentYear} BREAKDOWN ---`);
-            console.log(`  CapGemini (${secondMostRecentYear}):    £${capGeminiYear1.toFixed(2)}`);
-            console.log(`  Royal London (${secondMostRecentYear}): £${royalLondonYear1.toFixed(2)}`);
-            console.log(`  Baringa (${secondMostRecentYear}):      £${baringaYear1.toFixed(2)}`);
+            Object.keys(pensionData).forEach(pensionKey => {
+                console.log(`  ${pensionData[pensionKey].name} (${secondMostRecentYear}): £${year1Values[pensionKey].toFixed(2)}`);
+            });
             console.log(`  ${'-'.repeat(40)}`);
             console.log(`  Calculated Total:    £${totalYear1.toFixed(2)}`);
             console.log(`  Displayed Total:     ${displayedTotalYear1}`);
             
             console.log(`\n--- ${mostRecentYear} BREAKDOWN ---`);
-            console.log(`  CapGemini (${mostRecentYear}):    £${capGeminiYear2.toFixed(2)}`);
-            console.log(`  Royal London (${mostRecentYear}): £${royalLondonYear2.toFixed(2)}`);
-            console.log(`  Baringa (${mostRecentYear}):      £${baringaYear2.toFixed(2)}`);
+            Object.keys(pensionData).forEach(pensionKey => {
+                console.log(`  ${pensionData[pensionKey].name} (${mostRecentYear}): £${year2Values[pensionKey].toFixed(2)}`);
+            });
             console.log(`  ${'-'.repeat(40)}`);
             console.log(`  Calculated Total:    £${totalYear2.toFixed(2)}`);
             console.log(`  Displayed Total:     ${displayedTotalYear2}`);
@@ -1772,18 +2017,14 @@
             return {
                 year1: {
                     year: secondMostRecentYear,
-                    capGemini: capGeminiYear1,
-                    royalLondon: royalLondonYear1,
-                    baringa: baringaYear1,
+                    values: year1Values,
                     calculatedTotal: totalYear1,
                     displayedTotal: displayedTotalYear1,
                     matches: totalYear1Match
                 },
                 year2: {
                     year: mostRecentYear,
-                    capGemini: capGeminiYear2,
-                    royalLondon: royalLondonYear2,
-                    baringa: baringaYear2,
+                    values: year2Values,
                     calculatedTotal: totalYear2,
                     displayedTotal: displayedTotalYear2,
                     matches: totalYear2Match
@@ -1808,18 +2049,21 @@
                 return;
             }
             
-            console.log("Year | CapGemini  | Royal London | Baringa    | Total");
-            console.log("-----|------------|--------------|------------|------------");
+            console.log("Year | " + Object.keys(pensionData).map(key => pensionData[key].name.padEnd(12)).join(" | ") + " | Total");
+            console.log("-----|" + Object.keys(pensionData).map(() => "------------").join("|") + "|------------");
             
             years.forEach(year => {
-                const cg = pensionData.capGemini.values[year] || 0;
-                const rl = pensionData.royalLondon.values[year] || 0;
-                const br = pensionData.baringa.values[year] || 0;
-                const total = cg + rl + br;
+                let row = `${year} | `;
+                let total = 0;
                 
-                console.log(
-                    `${year} | £${cg.toFixed(2).padStart(9)} | £${rl.toFixed(2).padStart(11)} | £${br.toFixed(2).padStart(9)} | £${total.toFixed(2)}`
-                );
+                Object.keys(pensionData).forEach(pensionKey => {
+                    const value = pensionData[pensionKey].values[year] || 0;
+                    total += value;
+                    row += `£${value.toFixed(2).padStart(10)} | `;
+                });
+                
+                row += `£${total.toFixed(2)}`;
+                console.log(row);
             });
             
             console.log("\n═══════════════════════════════════════════════════════\n");
@@ -1896,9 +2140,13 @@
             console.log("╚═══════════════════════════════════════════════════════╝\n");
             
             console.log("CALCULATION VERIFICATION:");
-            console.log("  • 2023 Total:", verification.year2023.matches ? "✅ CORRECT" : "❌ INCORRECT");
-            console.log("  • 2024 Total:", verification.year2024.matches ? "✅ CORRECT" : "❌ INCORRECT");
-            console.log("  • Growth %:   ✅ Properly calculated\n");
+            if (verification) {
+                console.log("  • Year 1 Total:", verification.year1.matches ? "✅ CORRECT" : "❌ INCORRECT");
+                console.log("  • Year 2 Total:", verification.year2.matches ? "✅ CORRECT" : "❌ INCORRECT");
+                console.log("  • Growth %:   ✅ Properly calculated\n");
+            } else {
+                console.log("  • No data available for verification\n");
+            }
             
             console.log("FIREBASE STATUS:");
             console.log("  • Initialized:    ", window.firestoreDb ? "✅ YES" : "❌ NO");
@@ -1917,7 +2165,7 @@
                 console.log("║    PENSION DASHBOARD VERIFICATION TOOLS LOADED       ║");
                 console.log("╚═══════════════════════════════════════════════════════╝");
                 console.log("\n📊 Available Verification Commands:");
-                console.log("  • verifyTotals()             - Verify 2023/2024 calculations");
+                console.log("  • verifyTotals()             - Verify calculations");
                 console.log("  • verifyAllYears()           - Show all years data");
                 console.log("  • showPensionData()          - Display raw data structure");
                 console.log("  • testFirebaseConnection()   - Test Firebase save/load");
@@ -1926,7 +2174,7 @@
                 
                 // Auto-run verification if data exists
                 const years = getAllYears();
-                if (years.length > 0 && (pensionData.capGemini.values[2023] || pensionData.royalLondon.values[2023] || pensionData.baringa.values[2023])) {
+                if (years.length > 0) {
                     console.log("🔍 Auto-verifying current data...\n");
                     window.verifyTotals();
                 }
